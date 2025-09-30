@@ -1,4 +1,5 @@
 import { createInterface } from "node:readline";
+import { getCommands } from "./commands.js";
 const rl = createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -11,10 +12,24 @@ export function startREPL() {
     rl.prompt();
     rl.on('line', (input) => {
         const inputArr = cleanInput(input);
-        if (inputArr.length <= rl.prompt.length) {
+        const commands = getCommands();
+        const commandName = inputArr[0];
+        if (inputArr.length <= rl.prompt.length - 1) {
             return rl.prompt();
         }
-        console.log(`Your command was: ${inputArr[0]}`);
+        // console.log(`Your command was: ${inputArr[0]}`)
+        if (commands[commandName]) {
+            try {
+                commands[commandName].callback(commands);
+            }
+            catch (err) {
+                console.log(`Error: ${err}`);
+            }
+        }
+        else {
+            console.log('Unknown Command');
+        }
+        // console.log(getCommands())
         rl.prompt();
     });
 }
