@@ -1,12 +1,12 @@
+import { State } from "./state.js"
 import { getCommands } from "./commands.js"
 
-const commands = getCommands()
-let command = ''
+export function commandHelp(state: State) {
+    const lines: string[] = []
 
-for (const com in commands) {
-    command += `${commands[com].name}: ${commands[com].description}\n`
-}
-
-export function commandHelp() {
-    console.log(`Welcome to the Pokedex!\nUsage:\n\n${command}`)
+    for (const name in state.commands) {
+        const cmd = state.commands[name]
+        lines.push(`${cmd.name}: ${cmd.description}`)
+    }
+    console.log(`Welcome to the Pokedex!\nUsage:\n\n${lines.join("\n")}`)
 }
