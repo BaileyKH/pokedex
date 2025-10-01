@@ -1,5 +1,4 @@
 import { State } from "./state.js"
-import { getCommands } from "./commands.js"
 
 export function commandHelp(state: State) {
     const lines: string[] = []
