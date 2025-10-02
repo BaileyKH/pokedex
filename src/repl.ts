@@ -4,29 +4,32 @@ export function cleanInput(input: string): string[] {
     return input.toLowerCase().trim().split(/\s+/)
 }
 
-export function startREPL(state: State) {
+export async function startREPL(state: State) {
 
     const rl = state.readline
     const commands = state.commands
 
     rl.prompt()
 
-    rl.on('line', (input) => {
-        const inputArr = cleanInput(input)
-        const commandName = inputArr[0]
+    rl.on('line', async (input) => {
+        const [commandName] = cleanInput(input)
 
-        if (!commandName) return rl.prompt()
+        if (!commandName) { 
+            rl.prompt() 
+            return
+        }
 
         const cmd = commands[commandName]
+        if (!cmd) {
+            console.log("Unknown command")
+            rl.prompt()
+            return
+        }
 
-        if (cmd) {
-            try {
-                cmd.callback(state)
-            } catch (err) {
-                console.log(`Error: ${err}`)
-            }
-        } else {
-            console.log('Unknown Commands')
+        try {
+            await cmd.callback(state)
+        } catch (err) {
+            console.log("network error, try again")
         }
 
         rl.prompt()

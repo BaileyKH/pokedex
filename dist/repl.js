@@ -1,26 +1,27 @@
 export function cleanInput(input) {
     return input.toLowerCase().trim().split(/\s+/);
 }
-export function startREPL(state) {
+export async function startREPL(state) {
     const rl = state.readline;
     const commands = state.commands;
     rl.prompt();
-    rl.on('line', (input) => {
-        const inputArr = cleanInput(input);
-        const commandName = inputArr[0];
-        if (!commandName)
-            return rl.prompt();
-        const cmd = commands[commandName];
-        if (cmd) {
-            try {
-                cmd.callback(state);
-            }
-            catch (err) {
-                console.log(`Error: ${err}`);
-            }
+    rl.on('line', async (input) => {
+        const [commandName] = cleanInput(input);
+        if (!commandName) {
+            rl.prompt();
+            return;
         }
-        else {
-            console.log('Unknown Commands');
+        const cmd = commands[commandName];
+        if (!cmd) {
+            console.log("Unknown command");
+            rl.prompt();
+            return;
+        }
+        try {
+            await cmd.callback(state);
+        }
+        catch (err) {
+            console.log("network error, try again");
         }
         rl.prompt();
     });

@@ -1,6 +1,6 @@
 import { State } from "./state.js"
 
-export function commandHelp(state: State) {
+export async function commandHelp(state: State) {
     const lines: string[] = []
 
     for (const name in state.commands) {
