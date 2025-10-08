@@ -15,6 +15,7 @@ export async function commandMap(state: State) {
 export async function commandMapB(state: State) {
     if (!state.prevLocationsURL) {
         console.log("you're on the first page")
+        return;
     }
 
     let locations = await state.api.fetchLocations(state.prevLocationsURL)
