@@ -9,5 +9,5 @@ export function initState() {
     });
     const commands = getCommands();
     const api = new PokeAPI();
-    return { readline, commands, api, nextLocationsURL: null, prevLocationsURL: null };
+    return { readline, commands, api, nextLocationsURL: undefined, prevLocationsURL: undefined };
 }
